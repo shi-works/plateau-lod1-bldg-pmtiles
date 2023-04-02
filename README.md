@@ -69,14 +69,14 @@
 - `https://pmtiles-data.s3.ap-northeast-1.amazonaws.com/plateau/47201_naha-shi_lod1_Building.pmtiles`(24.9MB)
 
 ## ベクトルタイル設計情報
-- LOD1そのものを可能な限り生かしたデータです。
+- 建築物データ（LOD1）そのものを可能な限り生かしたデータです。
 - tippecanoeによるデータの間引きは行っていません。
 
 ### ズームレベル範囲
 - 0-14
 
 ### 属性
-- LOD1の属性はそのまま生かしています。
+- 建築物データ（LOD1）の属性はそのまま生かしています。
 
 ## PMTiles Viewer
 - PMTilesはPMTiles Viewerで閲覧することができます。
