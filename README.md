@@ -1,7 +1,7 @@
 # plateau-bldg-lod1-pmtiles
 
 ## データについて
-- 本データは、国土交通省がオープンデータとして公開している、[3D都市モデルPLATEAUの建築物データ（LOD1）](https://www.geospatial.jp/ckan/dataset/plateau)を[tippecanoe](https://github.com/felt/tippecanoe)を[PMTiles形式](https://github.com/protomaps/PMTiles)に変換したデータになります。
+- 本データは、国土交通省がオープンデータとして公開している、[3D都市モデルPLATEAUの建築物データ（LOD1）](https://www.geospatial.jp/ckan/dataset/plateau)を[tippecanoe](https://github.com/felt/tippecanoe)で[PMTiles形式](https://github.com/protomaps/PMTiles)に変換したデータになります。
 - オープンソースソフトウェアで構築
 
 ## デモサイト
