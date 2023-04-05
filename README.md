@@ -7,7 +7,7 @@
 ## デモサイト
 - https://web-map-maplibre.s3.ap-northeast-1.amazonaws.com/PLATEAU-VIEW/index.html
 - サンプル画像
-![image](https://user-images.githubusercontent.com/71203808/229335162-f3279b0a-b435-494d-bda5-bf7d797965f6.png)
+![image](https://user-images.githubusercontent.com/71203808/229964151-e36e8b39-921c-45fb-bf73-f888cd54b271.png)
 
 ## データ配布
 - 北海道札幌市,`https://pmtiles-data.s3.ap-northeast-1.amazonaws.com/plateau/01100_sapporo-shi_lod1_Building.pmtiles`,490.7MB
