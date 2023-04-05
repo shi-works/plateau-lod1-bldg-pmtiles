@@ -754,11 +754,13 @@
         .setHTML(
           // 表形式
           '<table ' + 'style="font-size: 8pt; table-layout: auto;"' + '>' +
+          /*
           '<tr>' +
           '<th colspan="2" style="text-align: left;background-color: #CCCCCC;">' + '建築物' + '</th> ' +
           '</tr>' +
+          */
           '<tr>' +
-          '<th overflow: hidden;background-color: #CCCCCC;>' + '項目' + '</th> ' + '<th overflow: hidden;background-color: #CCCCCC;>' + '内容' + '</th> ' +
+          '<th style="background-color: #CCCCCC;">' + '項目' + '</th> ' + '<th style="background-color: #CCCCCC;">' + '内容' + '</th> ' +
           '</tr>' +
           '<tr>' +
           '<td>' + 'OID' + '</td> ' + '<td>' + OID + '</td> ' +
@@ -802,12 +804,14 @@
           '<td>' + '建築物住所' + '</td> ' + '<td>' + bldg_address + '</td> ' +
           '</tr>' +
           */
-          '<tr>' +
-          '<th colspan="2" style="text-align: left;background-color: #CCCCCC;">' + '建物利用現況' + '</th> ' +
-          '</tr>' +
-          '<tr>' +
-          '<th overflow: hidden;background-color: #CCCCCC;>' + '項目' + '</th> ' + '<th overflow: hidden;background-color: #CCCCCC;>' + '内容' + '</th> ' +
-          '</tr>' +
+          /*
+           '<tr>' +
+           '<th colspan="2" style="text-align: left;background-color: #CCCCCC;">' + '建物利用現況' + '</th> ' +
+           '</tr>' +
+           '<tr>' +
+           '<th overflow: hidden;background-color: #CCCCCC;>' + '項目' + '</th> ' + '<th overflow: hidden;background-color: #CCCCCC;>' + '内容' + '</th> ' +
+           '</tr>' +
+           */
           '<tr>' +
           '<td>' + '敷地面積' + '</td> ' + '<td>' + uro_buildingDetails_siteArea + 'm<sup>2</sup>' + '</td> ' +
           '</tr>' +
@@ -840,12 +844,14 @@
           '<tr>' +
           '<td>' + '調査年' + '</td> ' + '<td>' + uro_buildingDetails_surveyYear + '年' + '</td> ' +
           '</tr>' +
+          /*
           '<tr>' +
           '<th colspan="2" style="text-align: left;background-color: #CCCCCC;">' + '拡張属性' + '</th> ' +
           '</tr>' +
           '<tr>' +
           '<th overflow: hidden;background-color: #CCCCCC;>' + '項目' + '</th> ' + '<th overflow: hidden;background-color: #CCCCCC;>' + '内容' + '</th> ' +
           '</tr>' +
+          */
           '<tr>' +
           '<td>' + '建物用途名_基礎' + '</td> ' + '<td>' + gen_tatemonoyotomei_kiso + '</td> ' +
           '</tr>' +
