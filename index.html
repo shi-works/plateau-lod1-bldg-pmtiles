@@ -166,6 +166,18 @@
     </div>
   </div>
   <script type="text/javascript">
+    // add the PMTiles plugin to the maplibregl global.
+    let protocol = new pmtiles.Protocol();
+    maplibregl.addProtocol("pmtiles", protocol.tile);
+
+    // PLATEAUベクトルタイル
+    let PMTiles_URL = "https://pmtiles-data.s3.ap-northeast-1.amazonaws.com/plateau/01100_sapporo-shi_lod1_Building.pmtiles";
+
+    const p = new pmtiles.PMTiles(PMTiles_URL)
+    p.getMetadata().then((res) => console.log(res));
+
+    // this is so we share one instance across the JS code and the map renderer
+    protocol.add(p);
 
     // basic MapLibre map
     const map = new maplibregl.Map({
@@ -211,7 +223,7 @@
     map.addControl(new maplibregl.AttributionControl({
       compact: true,
       // カスタムAttributionを表示
-      customAttribution: "<a href='https://github.com/Project-PLATEAU/plateau-streaming-tutorial' target='_blank'>PLATEAU配信サービス（試験運用）</a>"
+      customAttribution: '（<a href="https://twitter.com/syanseto" target="_blank">Twitter</a> | <a href="https://github.com/shi-works/plateau-lod1-bldg-pmtiles" target="_blank">Github</a>） '
     }));
 
     var hoveredStateId = null;
@@ -225,8 +237,8 @@
           'https://gic-plateau.s3.ap-northeast-1.amazonaws.com/2020/ortho/tiles/{z}/{x}/{y}.png'
         ],
         maxzoom: 19,
-        minzoom: 10
-        //attribution: '<a href="https://www.mlit.go.jp/plateau/">国土交通省Project PLATEAU</a>'
+        minzoom: 10,
+        attribution: "<a href='https://github.com/Project-PLATEAU/plateau-streaming-tutorial' target='_blank'>PLATEAU配信サービス（試験運用）</a>"
       });
 
       map.addLayer({
@@ -254,12 +266,6 @@
         );
         orthosliderOpactiyValue.textContent = e.target.value + '%';
       });
-
-      // PLATEAUベクトルタイル
-      let protocol = new pmtiles.Protocol();
-      maplibregl.addProtocol("pmtiles", protocol.tile);
-      let PMTiles_URL = "https://pmtiles-data.s3.ap-northeast-1.amazonaws.com/plateau/01100_sapporo-shi_lod1_Building.pmtiles";
-      // let PMTiles_URL = "https://pmtiles-data.s3.ap-northeast-1.amazonaws.com/plateau/13100_tokyo-23ku_lod1_Building.pmtiles";
 
       map.addSource("pmtiles-lod1-building", {
         type: "vector",
