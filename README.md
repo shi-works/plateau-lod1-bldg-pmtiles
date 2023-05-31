@@ -67,6 +67,7 @@
 - 熊本県益城町,`https://pmtiles-data.s3.ap-northeast-1.amazonaws.com/plateau/43443_mashiki-machi_lod1_Building.pmtiles`,8.7MB
 - 大分県日田市,`https://pmtiles-data.s3.ap-northeast-1.amazonaws.com/plateau/44204_hita-shi_lod1_Building.pmtiles`,18.5MB
 - 沖縄県那覇市,`https://pmtiles-data.s3.ap-northeast-1.amazonaws.com/plateau/47201_naha-shi_lod1_Building.pmtiles`,24.9MB
+- 全国56都市,`https://pmtiles-data.s3.ap-northeast-1.amazonaws.com/plateau/PLATEAU_2020_LOD1.pmtiles`,5.2GB
 
 ## ベクトルタイル設計情報
 - 建築物データ（LOD1）そのものを可能な限り生かしたデータです。
