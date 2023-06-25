@@ -171,7 +171,7 @@
     maplibregl.addProtocol("pmtiles", protocol.tile);
 
     // PLATEAUベクトルタイル
-    let PMTiles_URL = "https://pmtiles-data.s3.ap-northeast-1.amazonaws.com/plateau/01100_sapporo-shi_lod1_Building.pmtiles";
+    let PMTiles_URL = "https://xs489works.xsrv.jp/pmtiles-data/plateau/01100_sapporo-shi_lod1_Building.pmtiles";
 
     const p = new pmtiles.PMTiles(PMTiles_URL)
     p.getMetadata().then((res) => console.log(res));
