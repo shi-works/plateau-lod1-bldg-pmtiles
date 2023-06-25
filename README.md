@@ -5,7 +5,7 @@
 - オープンソースソフトウェアで構築
 
 ## デモサイト
-- https://web-map-maplibre.s3.ap-northeast-1.amazonaws.com/PLATEAU-VIEW/index.html
+- https://shi-works.github.io/plateau-lod1-bldg-pmtiles/
 - サンプル画像
 ![image](https://user-images.githubusercontent.com/71203808/229964151-e36e8b39-921c-45fb-bf73-f888cd54b271.png)
 
