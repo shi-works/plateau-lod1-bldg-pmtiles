@@ -437,7 +437,8 @@
       // PLATEAUベクトルタイル
       let protocol = new pmtiles.Protocol();
       maplibregl.addProtocol("pmtiles", protocol.tile);
-      let PMTiles_URL = "https://pmtiles-data.s3.ap-northeast-1.amazonaws.com/plateau/" + BasePMTilesName + "_lod1_Building.pmtiles";
+      // let PMTiles_URL = "https://pmtiles-data.s3.ap-northeast-1.amazonaws.com/plateau/" + BasePMTilesName + "_lod1_Building.pmtiles";
+      let PMTiles_URL = "https://xs489works.xsrv.jp/pmtiles-data/plateau/" + BasePMTilesName + "_lod1_Building.pmtiles";
 
       map.addSource("pmtiles-lod1-building", {
         type: "vector",
