@@ -68,6 +68,7 @@
 - 大分県日田市,`https://xs489works.xsrv.jp/pmtiles-data/plateau/44204_hita-shi_lod1_Building.pmtiles`,18.5MB
 - 沖縄県那覇市,`https://xs489works.xsrv.jp/pmtiles-data/plateau/47201_naha-shi_lod1_Building.pmtiles`,24.9MB
 - 全国56都市,`https://xs489works.xsrv.jp/pmtiles-data/plateau/PLATEAU_2020_LOD1.pmtiles`,5.2GB
+- 全国56都市（ズームレベル14以上）,`https://xs489works.xsrv.jp/pmtiles-data/plateau/PLATEAU_2020_LOD1_Z14.pmtiles`,1.2GB
 
 ## ベクトルタイル設計情報
 - 建築物データ（LOD1）そのものを可能な限り生かしたデータです。
