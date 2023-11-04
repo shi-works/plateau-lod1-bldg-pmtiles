@@ -24,6 +24,7 @@
 - 埼玉県毛呂山町,`https://xs489works.xsrv.jp/pmtiles-data/plateau/11326_moroyama-machi_lod1_Building.pmtiles`,8.3MB
 - 千葉県柏市,`https://xs489works.xsrv.jp/pmtiles-data/plateau/12217_kashiwa-shi_lod1_Building.pmtiles`,74.7MB
 - 東京都23区,`https://xs489works.xsrv.jp/pmtiles-data/plateau/13100_tokyo-23ku_lod1_Building.pmtiles`,898.3MB
+- 東京都23区,`https://xs489works.xsrv.jp/pmtiles-data/plateau/13100_tokyo-23ku_lod1_Building_Z10_z18.pmtiles`,308MB ※ズームレベル10～18、属性はbldg_measuredHeightのみ
 - 東京都八王子市南大沢,`https://xs489works.xsrv.jp/pmtiles-data/plateau/13201_hachioji-shi_lod1_Building.pmtiles`,2.7MB
 - 東京都東村山市,`https://xs489works.xsrv.jp/pmtiles-data/plateau/13213_higashimurayama-shi_lod1_Building.pmtiles`,21.8MB
 - 神奈川県横浜市,`https://xs489works.xsrv.jp/pmtiles-data/plateau/14100_yokohama-shi_lod1_Building.pmtiles`,387.9MB
