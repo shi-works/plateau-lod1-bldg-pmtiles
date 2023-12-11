@@ -4,9 +4,9 @@
   <title>3D都市モデル PLATEAU-VIEW（PMTiles）</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
-  <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet">
-  <script src="https://unpkg.com/pmtiles@2.7.0/dist/index.js"></script>
+  <script src="https://unpkg.com/maplibre-gl@3.4.1/dist/maplibre-gl.js"></script>
+  <link href="https://unpkg.com/maplibre-gl@3.4.1/dist/maplibre-gl.css" rel="stylesheet">
+  <script src="https://unpkg.com/pmtiles@2.10.0/dist/index.js"></script>
   <style>
     body {
       margin: 0;
@@ -20,7 +20,7 @@
     .map-overlay {
       font: bold 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
       position: absolute;
-      width: 220px;
+      width: 190px;
       bottom: 20px;
       left: 0px;
       padding: 10px;
@@ -161,39 +161,31 @@
     <div class="map-overlay-inner">
       <label>建築物モデル 不透明度: <span id="model-slider-opacity-value">70%</span></label>
       <input id="model-slider-opacity" type="range" min="0" max="100" step="0" value="70">
-      <label>航空写真オルソ画像 不透明度: <span id="ortho-slider-opacity-value">0%</span></label>
+      <label>航空写真 不透明度: <span id="ortho-slider-opacity-value">0%</span></label>
       <input id="ortho-slider-opacity" type="range" min="0" max="100" step="0" value="0">
     </div>
   </div>
   <script type="text/javascript">
-    // add the PMTiles plugin to the maplibregl global.
+    // addProtocolの設定
     let protocol = new pmtiles.Protocol();
     maplibregl.addProtocol("pmtiles", protocol.tile);
 
     // PLATEAUベクトルタイル
     let PMTiles_URL = "https://xs489works.xsrv.jp/pmtiles-data/plateau/01100_sapporo-shi_lod1_Building.pmtiles";
 
-    const p = new pmtiles.PMTiles(PMTiles_URL)
-    p.getMetadata().then((res) => console.log(res));
-
-    // this is so we share one instance across the JS code and the map renderer
-    protocol.add(p);
-
-    // basic MapLibre map
+    // マップを初期化
     const map = new maplibregl.Map({
       container: 'map',
       style: './std.json',
-      // style: 'https://tile2.openstreetmap.jp/styles/osm-bright/style.json',
       hash: true,
       zoom: 16,
       maxZoom: 23,
       minZoom: 4,
       center: [141.3507552, 43.0686606], // 札幌駅
-      // center: [139.7671248, 35.6812362], // 東京駅
       pitch: 60,
+      maxPitch: 85,
       bearing: 0,
       hash: true,
-      // 既存Attributionを非表示
       attributionControl: false,
     })
 
@@ -226,21 +218,42 @@
       customAttribution: '（<a href="https://twitter.com/shi__works" target="_blank">Twitter</a> | <a href="https://github.com/shi-works/plateau-lod1-bldg-pmtiles" target="_blank">Github</a>） '
     }));
 
+    // 3D地形コントロール表示
+    map.addControl(
+      new maplibregl.TerrainControl({
+        source: 'gsi-terrain-rgb',
+        exaggeration: 1 // 標高を強調する倍率
+      })
+    );
+
     var hoveredStateId = null;
 
     map.on('load', () => {
+      // 標高タイルソース
+      map.addSource("gsidem-terrain-rgb", {
+        type: 'raster-dem',
+        tiles: [
+          'https://xs489works.xsrv.jp/raster-tiles/gsi/gsi-dem-terrain-rgb/{z}/{x}/{y}.png'
+        ],
+        attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html#dem" target="_blank">地理院タイル(標高タイル)</a>',
+        tileSize: 256
+      });
 
-      // 航空写真オルソ画像タイルデータ
+      // 標高タイルセット
+      map.setTerrain({ 'source': 'gsidem-terrain-rgb', 'exaggeration': 1 });
+
+      // 航空写真オルソ画像ソース
       map.addSource('plateau-ortho', {
         type: 'raster',
         tiles: [
           'https://gic-plateau.s3.ap-northeast-1.amazonaws.com/2020/ortho/tiles/{z}/{x}/{y}.png'
         ],
-        maxzoom: 19,
         minzoom: 10,
+        maxzoom: 19,
         attribution: "<a href='https://github.com/Project-PLATEAU/plateau-streaming-tutorial' target='_blank'>PLATEAU配信サービス（試験運用）</a>"
       });
 
+      // 航空写真オルソ画像レイヤ
       map.addLayer({
         id: 'plateau-ortho',
         type: 'raster',
@@ -251,7 +264,7 @@
       map.setPaintProperty(
         'plateau-ortho',
         'raster-opacity',
-        0.0
+        0
       );
 
       // スライダーで航空写真オルソ画像タイルの不透明度を制御
@@ -435,9 +448,6 @@
       });
 
       // PLATEAUベクトルタイル
-      let protocol = new pmtiles.Protocol();
-      maplibregl.addProtocol("pmtiles", protocol.tile);
-      // let PMTiles_URL = "https://pmtiles-data.s3.ap-northeast-1.amazonaws.com/plateau/" + BasePMTilesName + "_lod1_Building.pmtiles";
       let PMTiles_URL = "https://xs489works.xsrv.jp/pmtiles-data/plateau/" + BasePMTilesName + "_lod1_Building.pmtiles";
 
       map.addSource("pmtiles-lod1-building", {
@@ -541,12 +551,9 @@
       var bldg_class = e.features[0].properties['bldg_class']; // 建築物形態区分
       var bldg_usage = e.features[0].properties['bldg_usage']; // 建築物用途
       var bldg_yearOfConstruction = e.features[0].properties['bldg_yearOfConstruction']; // 建築年
-      // var bldg_yearOfDemolition = e.features[0].properties['bldg_yearOfDemolition']; // 解体年
-      // var bldg_roofType = e.features[0].properties['bldg_roofType']; // 屋根の種別
       var bldg_measuredHeight = e.features[0].properties['bldg_measuredHeight']; // 計測高さ
       var bldg_storeysAboveGround = e.features[0].properties['bldg_storeysAboveGround']; // 地上階数
       var bldg_storeysBelowGround = e.features[0].properties['bldg_storeysBelowGround']; // 地下階数
-      // var bldg_address = e.features[0].properties['bldg_address'];
 
       // 建物利用現況(uro)
       var uro_buildingDetails_siteArea = e.features[0].properties['uro_buildingDetails_siteArea']; // 敷地面積
@@ -554,10 +561,6 @@
       var uro_buildingDetails_buildingFootprintArea = e.features[0].properties['uro_buildingDetails_buildingFootprintArea']; // 建築面積
       var uro_buildingDetails_buildingRoofEdgeArea = e.features[0].properties['uro_buildingDetails_buildingRoofEdgeArea']; // 図形面積
       var uro_buildingDetails_buildingStructureType = e.features[0].properties['uro_buildingDetails_buildingStructureType']; // 構造種別
-      // var uro_buildingDetails_fireproofStructureType = e.features[0].properties['uro_buildingDetails_fireproofStructureType']; // 耐火構造種別
-      // var uro_buildingDetails_urbanPlanType = e.features[0].properties['uro_buildingDetails_urbanPlanType']; // 都市計画区域
-      // var uro_buildingDetails_areaClassificationType = e.features[0].properties['uro_buildingDetails_areaClassificationType']; // 区域区分
-      // var uro_buildingDetails_landUsePlanType = e.features[0].properties['uro_buildingDetails_landUsePlanType']; // 土地利用区分
       var uro_buildingDetails_surveyYear = e.features[0].properties['uro_buildingDetails_surveyYear']; // 調査年
 
       // 拡張属性(gen)
@@ -578,22 +581,15 @@
       if (bldg_class === undefined) { bldg_class = "-" };
       if (bldg_usage === undefined) { bldg_usage = "-" };
       if (bldg_yearOfConstruction === undefined) { bldg_yearOfConstruction = "-" };
-      // if (bldg_yearOfDemolition === undefined) { bldg_yearOfDemolition = "-" };
-      // if (bldg_roofType === undefined) { bldg_roofType = "-" };
       if (bldg_measuredHeight === undefined) { bldg_measuredHeight = "-" };
       if (bldg_storeysAboveGround === undefined) { bldg_storeysAboveGround = "-" };
       if (bldg_storeysBelowGround === undefined) { bldg_storeysBelowGround = "-" };
-      // if (bldg_address === undefined) { bldg_address = "-" };
 
       if (uro_buildingDetails_siteArea === undefined) { uro_buildingDetails_siteArea = "-" };
       if (uro_buildingDetails_totalFloorArea === undefined) { uro_buildingDetails_totalFloorArea = "-"; }
       if (uro_buildingDetails_buildingFootprintArea === undefined) { uro_buildingDetails_buildingFootprintArea = "-"; }
       if (uro_buildingDetails_buildingRoofEdgeArea === undefined) { uro_buildingDetails_buildingRoofEdgeArea = "-"; }
       if (uro_buildingDetails_buildingStructureType === undefined) { uro_buildingDetails_buildingStructureType = "-"; }
-      // if (uro_buildingDetails_fireproofStructureType === undefined) { uro_buildingDetails_fireproofStructureType = "-"; }
-      // if (uro_buildingDetails_urbanPlanType === undefined) { uro_buildingDetails_urbanPlanType = "-"; }
-      // if (uro_buildingDetails_areaClassificationType === undefined) { uro_buildingDetails_areaClassificationType = "-"; }
-      // if (uro_buildingDetails_landUsePlanType === undefined) { uro_buildingDetails_landUsePlanType = "-"; }
       if (uro_buildingDetails_surveyYear === undefined) { uro_buildingDetails_surveyYear = "-"; }
 
       if (gen_tatemonoyotomei_kiso === undefined) { gen_tatemonoyotomei_kiso = "-" };
@@ -668,70 +664,6 @@
         bldg_usage_name = '不明';
       }
 
-      /*
-      // bldg_roofType(Building_roofType.xml)
-      var bldg_roofType_name = '-';
-      if (bldg_roofType === '1') {
-        bldg_roofType_name = '切妻屋根';
-      } else if (bldg_roofType === '2') {
-        bldg_roofType_name = '寄棟屋根';
-      } else if (bldg_roofType === '3') {
-        bldg_roofType_name = '方形屋根';
-      } else if (bldg_roofType === '4') {
-        bldg_roofType_name = '陸屋根';
-      } else if (bldg_roofType === '5') {
-        bldg_roofType_name = '片流れ屋根';
-      } else if (bldg_roofType === '6') {
-        bldg_roofType_name = '袴腰屋根/半切妻屋根';
-      } else if (bldg_roofType === '7') {
-        bldg_roofType_name = '入母屋屋根';
-      } else if (bldg_roofType === '8') {
-        bldg_roofType_name = '錣（しころ）屋根';
-      } else if (bldg_roofType === '9') {
-        bldg_roofType_name = 'マンサード屋根';
-      } else if (bldg_roofType === '10') {
-        bldg_roofType_name = '越屋根';
-      } else if (bldg_roofType === '11') {
-        bldg_roofType_name = '招き屋根';
-      } else if (bldg_roofType === '12') {
-        bldg_roofType_name = '差し掛け屋根';
-      } else if (bldg_roofType === '13') {
-        bldg_roofType_name = 'バタフライ屋根';
-      } else if (bldg_roofType === '14') {
-        bldg_roofType_name = '鋸屋根';
-      } else if (bldg_roofType === '15') {
-        bldg_roofType_name = '六柱屋根';
-      } else if (bldg_roofType === '16') {
-        bldg_roofType_name = '八柱屋根';
-      } else if (bldg_roofType === '17') {
-        bldg_roofType_name = 'M型屋根';
-      } else if (bldg_roofType === '18') {
-        bldg_roofType_name = '下屋付招き屋根';
-      } else if (bldg_roofType === '19') {
-        bldg_roofType_name = '棟違い屋根';
-      } else if (bldg_roofType === '20') {
-        bldg_roofType_name = '乗り越し屋根';
-      } else if (bldg_roofType === '21') {
-        bldg_roofType_name = '腰折れ屋根';
-      } else if (bldg_roofType === '22') {
-        bldg_roofType_name = '隅切屋根';
-      } else if (bldg_roofType === '23') {
-        bldg_roofType_name = 'アーチ屋根';
-      } else if (bldg_roofType === '24') {
-        bldg_roofType_name = 'ドーム屋根';
-      } else if (bldg_roofType === '25') {
-        bldg_roofType_name = 'シェル屋根';
-      } else if (bldg_roofType === '26') {
-        bldg_roofType_name = 'カテナリー屋根';
-      } else if (bldg_roofType === '27') {
-        bldg_roofType_name = '膜構造';
-      } else if (bldg_roofType === '28') {
-        bldg_roofType_name = 'その他';
-      } else if (bldg_roofType === '9020') {
-        bldg_roofType_name = '不明';
-      }
-      */
-
       // buildingStructureType
       var uro_buildingDetails_buildingStructureType_name = '-';
       if (uro_buildingDetails_buildingStructureType === '601') {
@@ -761,11 +693,6 @@
         .setHTML(
           // 表形式
           '<table ' + 'style="font-size: 8pt; table-layout: auto;"' + '>' +
-          /*
-          '<tr>' +
-          '<th colspan="2" style="text-align: left;background-color: #CCCCCC;">' + '建築物' + '</th> ' +
-          '</tr>' +
-          */
           '<tr>' +
           '<th style="background-color: #CCCCCC;">' + '項目' + '</th> ' + '<th style="background-color: #CCCCCC;">' + '内容' + '</th> ' +
           '</tr>' +
@@ -787,16 +714,6 @@
           '<tr>' +
           '<td>' + '建築年' + '</td> ' + '<td>' + bldg_yearOfConstruction + '年' + '</td> ' +
           '</tr>' +
-          /*
-          '<tr>' +
-          '<td>' + '解体年' + '</td> ' + '<td>' + bldg_yearOfDemolition + '年' + '</td> ' +
-          '</tr>' +
-          */
-          /*
-           '<tr>' +
-           '<td>' + '建築物屋根形状' + '</td> ' + '<td>' + bldg_roofType_name + '</td> ' +
-           '</tr>' +
-           */
           '<tr>' +
           '<td>' + '計測高さ' + '</td> ' + '<td>' + bldg_measuredHeight + 'm' + '</td> ' +
           '</tr>' +
@@ -806,19 +723,6 @@
           '<tr>' +
           '<td>' + '地下階数' + '</td> ' + '<td>' + bldg_storeysBelowGround + '階' + '</td> ' +
           '</tr>' +
-          /*
-          '<tr>' +
-          '<td>' + '建築物住所' + '</td> ' + '<td>' + bldg_address + '</td> ' +
-          '</tr>' +
-          */
-          /*
-           '<tr>' +
-           '<th colspan="2" style="text-align: left;background-color: #CCCCCC;">' + '建物利用現況' + '</th> ' +
-           '</tr>' +
-           '<tr>' +
-           '<th overflow: hidden;background-color: #CCCCCC;>' + '項目' + '</th> ' + '<th overflow: hidden;background-color: #CCCCCC;>' + '内容' + '</th> ' +
-           '</tr>' +
-           */
           '<tr>' +
           '<td>' + '敷地面積' + '</td> ' + '<td>' + uro_buildingDetails_siteArea + 'm<sup>2</sup>' + '</td> ' +
           '</tr>' +
@@ -834,31 +738,9 @@
           '<tr>' +
           '<td>' + '構造種別' + '</td> ' + '<td>' + uro_buildingDetails_buildingStructureType_name + '</td> ' +
           '</tr>' +
-          /*
-          '<tr>' +
-          '<td>' + '耐火構造種別' + '</td> ' + '<td>' + uro_buildingDetails_fireproofStructureType + '</td> ' +
-          '</tr>' +
-          '<tr>' +
-          '<td>' + '都市計画区域' + '</td> ' + '<td>' + uro_buildingDetails_urbanPlanType + '</td> ' +
-          '</tr>' +
-          '<tr>' +
-          '<td>' + '区域区分' + '</td> ' + '<td>' + uro_buildingDetails_areaClassificationType + '</td> ' +
-          '</tr>' +
-          '<tr>' +
-          '<td>' + '土地利用区分' + '</td> ' + '<td>' + uro_buildingDetails_landUsePlanType + '</td> ' +
-          '</tr>' +
-          */
           '<tr>' +
           '<td>' + '調査年' + '</td> ' + '<td>' + uro_buildingDetails_surveyYear + '年' + '</td> ' +
           '</tr>' +
-          /*
-          '<tr>' +
-          '<th colspan="2" style="text-align: left;background-color: #CCCCCC;">' + '拡張属性' + '</th> ' +
-          '</tr>' +
-          '<tr>' +
-          '<th overflow: hidden;background-color: #CCCCCC;>' + '項目' + '</th> ' + '<th overflow: hidden;background-color: #CCCCCC;>' + '内容' + '</th> ' +
-          '</tr>' +
-          */
           '<tr>' +
           '<td>' + '建物用途名_基礎' + '</td> ' + '<td>' + gen_tatemonoyotomei_kiso + '</td> ' +
           '</tr>' +
