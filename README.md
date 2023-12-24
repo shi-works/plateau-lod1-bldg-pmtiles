@@ -1,7 +1,7 @@
 # plateau-lod1-bldg-pmtiles
 
 ## データについて
-- 本データは、国土交通省がオープンデータとして公開している、[3D都市モデルPLATEAUの建築物データ（LOD1）](https://www.geospatial.jp/ckan/dataset/plateau)を[tippecanoe](https://github.com/felt/tippecanoe)で[PMTiles形式](https://github.com/protomaps/PMTiles)に変換したデータになります。
+- 本データは、国土交通省がオープンデータとして公開している、[3D都市モデルPLATEAUの建築物データ（LOD1、2020年）](https://www.geospatial.jp/ckan/dataset/plateau)を[tippecanoe](https://github.com/felt/tippecanoe)で[PMTiles形式](https://github.com/protomaps/PMTiles)に変換したデータになります。
 - オープンソースソフトウェアで構築
 
 ## デモサイト
@@ -72,14 +72,14 @@
 - 全国56都市（ズームレベル14以上）,`https://xs489works.xsrv.jp/pmtiles-data/plateau/PLATEAU_2020_LOD1_Z14.pmtiles`,1.2GB
 
 ## ベクトルタイル設計情報
-- 建築物データ（LOD1）そのものを可能な限り生かしたデータです。
+- 建築物データ（LOD1、2020年）そのものを可能な限り生かしたデータです。
 - tippecanoeによるデータの間引きは行っていません。
 
 ### ズームレベル範囲
 - 0-14
 
 ### 属性
-- 建築物データ（LOD1）の属性はそのまま生かしています。
+- 建築物データ（LOD1、2020年）の属性はそのまま生かしています。
 
 ## PMTiles Viewer
 - PMTilesはPMTiles Viewerで閲覧することができます。
@@ -88,7 +88,7 @@
 ## ライセンス
 本データセットは[CC-BY-4.0](https://github.com/shi-works/plateau-bldg-lod1-pmtiles/blob/main/LICENSE)で提供されます。使用の際には本レポジトリへのリンクを提示してください。
 
-また、本データセットは3D都市モデルPLATEAUの建築物データ（LOD1）を加工して作成したものです。本データセットの使用・加工にあたっては、[PLATEAUのWebサイトのサイトポリシー](https://www.mlit.go.jp/plateau/site-policy/)を必ずご確認ください。
+また、本データセットは3D都市モデルPLATEAUの建築物データ（LOD1、2020年）を加工して作成したものです。本データセットの使用・加工にあたっては、[PLATEAUのWebサイトのサイトポリシー](https://www.mlit.go.jp/plateau/site-policy/)を必ずご確認ください。
 
 ## 免責事項
 利用者が当該データを用いて行う一切の行為について何ら責任を負うものではありません。
